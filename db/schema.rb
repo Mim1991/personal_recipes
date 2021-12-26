@@ -10,10 +10,39 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_26_143055) do
+ActiveRecord::Schema.define(version: 2021_12_26_145240) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "ingredients", force: :cascade do |t|
+    t.string "ingredient_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "recipe_ing_joins", force: :cascade do |t|
+    t.bigint "recipe_id", null: false
+    t.bigint "ingredient_id", null: false
+    t.integer "quantity"
+    t.string "unit"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ingredient_id"], name: "index_recipe_ing_joins_on_ingredient_id"
+    t.index ["recipe_id"], name: "index_recipe_ing_joins_on_recipe_id"
+  end
+
+  create_table "recipes", force: :cascade do |t|
+    t.integer "cook_time"
+    t.string "difficulty"
+    t.integer "protein_amount"
+    t.integer "carb_amount"
+    t.integer "fat_amount"
+    t.string "category"
+    t.text "notes"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -27,4 +56,6 @@ ActiveRecord::Schema.define(version: 2021_12_26_143055) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "recipe_ing_joins", "ingredients"
+  add_foreign_key "recipe_ing_joins", "recipes"
 end
